@@ -1,0 +1,12 @@
+/src/kepler/core.clj~
+/project.clj~
+/kepler.clj~
+/target
+/classes
+/checkouts
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/.lein-*
+/.nrepl-port
