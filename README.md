@@ -24,7 +24,7 @@ return the x, y, and z coordinates in the ecliptic for the Moon at the current t
 
 ## License
 
-Copyright © 2013 FIXME
+Copyright © 2014
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
