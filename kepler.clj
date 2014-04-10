@@ -87,12 +87,13 @@
                      0.00006447 0.00000818 0.00022400 218.46515314 0.01009938 -0.00606302
                      -0.00041348    0.68346318   -0.10162547    7.67025000))
 
+(defn j2000 [datetime]
+  "Returns the julian datetime as a real number, starting from 1/1/2000 00:00:00"
+  (t/interval (t/date-time 2000) datetime))
 
 (defn in-centuries [in]
+  "Converts from units of days to units of centuries"
   (/ (t/in-days in) 36524.2))
-
-(defn j2000 [datetime]
-  (t/interval (t/date-time 2000) datetime))
 
 (in-centuries (j2000 (t/now)))
 
@@ -162,9 +163,9 @@ w :omega omega :I I}"
   ([el datetime]
      (ephemeris el (in-centuries (j2000 datetime)) 1e-4)))
 
-(ephemeris Mercury3k (t/now))
-(ephemeris Jupiter (t/now))
-(ephemeris Jupiter3k (t/now))
+;; (ephemeris Mercury3k (t/now))
+;; (ephemeris Jupiter (t/now))
+;; (ephemeris Jupiter3k (t/now))
 
 (defn xp [eph]
   (* (:a eph) (- (cosd (:E eph)) (:e eph))))
@@ -174,8 +175,8 @@ w :omega omega :I I}"
      (Math/sqrt (- 1 (* (:e eph) (:e eph))))
      (sind (:E eph))))
 
-(xp (ephemeris Mercury (t/now)))
-(yp (ephemeris Mercury (t/now)))
+;; (xp (ephemeris Mercury (t/now)))
+;; (yp (ephemeris Mercury (t/now)))
 
 (defn xecl [eph]
   "Calculate the x-coordinate of the body in the ecliptic"
@@ -210,9 +211,9 @@ w :omega omega :I I}"
     (+ (* (sind w)(sind I) x)
        (* (cosd w)(sind I) y))))
           
-(xecl (ephemeris Mercury (t/now)))
-(yecl (ephemeris Mercury (t/now)))
-(zecl (ephemeris Mercury (t/now)))
+;; (xecl (ephemeris Mercury (t/now)))
+;; (yecl (ephemeris Mercury (t/now)))
+;; (zecl (ephemeris Mercury (t/now)))
 
 
 ;;; Lunar ephemeris
@@ -285,6 +286,7 @@ w :omega omega :I I}"
         (* (sind (beta0 t))
            (cosd obliq)))))
 
+;; obliquity of the Earth's axis on J2000
 (def obliquityJ2000 23.43928)
 
 (defn yeq [t]
@@ -293,18 +295,22 @@ w :omega omega :I I}"
 (defn zeq [t]
   (zcommon t obliquityJ2000))
 
+
 (defn xecl-lunar [t]
+  "Ecliptic x-coordinate of the Moon"
   (xeq (in-centuries (j2000 t))))
 
 (defn yecl-lunar [t]
+  "Ecliptic y-coordinate of the Moon"
   (ycommon (in-centuries (j2000 t)) 0))
 
 (defn zecl-lunar [t]
+  "Ecliptic z-coordinate of the Moon"
   (zcommon (in-centuries (j2000 t)) 0))
 
-(xecl-lunar (t/now))
-(yecl-lunar (t/now))
-(zecl-lunar (t/now))
+;; (xecl-lunar (t/now))
+;; (yecl-lunar (t/now))
+;; (zecl-lunar (t/now))
 
 (defn newMoonEpoch [datetime]
   (t/interval (t/date-time 1970 1 7) datetime))
@@ -312,6 +318,7 @@ w :omega omega :I I}"
 (newMoonEpoch (t/now))
 
 (defn phaseFraction [datetime]
+  "Phase of the moon as a real from 0 to 1 where 0 represents the new moon and 0.5 represents the full moon"
   (let [lp 2551443.0] 
     (/ (mod (t/in-secs (newMoonEpoch datetime))
             lp)
